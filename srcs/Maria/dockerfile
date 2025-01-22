@@ -1,0 +1,8 @@
+FROM debian:buster
+
+RUN apt-get -y update
+RUN apt install -y mariadb-server
+RUN service mysql start
+RUN mariadb
+
+EXPOSE 3306
