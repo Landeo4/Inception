@@ -1,0 +1,11 @@
+FROM debian:buster
+
+RUN apt -y update
+RUN apt-get -y install systemd
+RUN apt-get -y install nginx
+RUN service nginx restart
+COPY ./conf/wordpress.com /etc/nginx/sites-available/
+RUN ln -s /etc/nginx/sites-available/wordpress.com /etc/nginx/sites-enabled/
+RUN service nginx restart
+EXPOSE 443
+EXPOSE 9000

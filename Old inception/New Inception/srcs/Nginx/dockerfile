@@ -1,0 +1,6 @@
+FROM debian:buster
+RUN apt-get update && apt install -y nginx
+RUN apt install curl -y
+RUN apt install vim -y
+RUN mkdir -p /etc/nginx/ssl
+RUN apt install OpenSSL -y

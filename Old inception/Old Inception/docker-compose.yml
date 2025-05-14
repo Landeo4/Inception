@@ -1,0 +1,58 @@
+network :
+  backend: 
+    driver: bridge
+  frontend:
+    driver: bridge
+
+service:
+  MariaDB:
+    build:  
+      context: ./Maria
+      dockerfile: dockerfile
+    container_name: MariaDB
+    restart: always
+    environement:
+      - ${USER}
+    volume:
+      - mariabd-data:/var/lib/mysql
+    networks:
+      - backend
+    expose:
+      - "${DB_PORT}"
+  
+
+  Worpress:
+    build:
+      context: ./wordpress
+      dockerfile: dockerfile
+    container_name: Wordpress
+    restart: always
+    depends_on:
+      - MariaDB
+    volume:
+      - wordpress:/var/www/wordpress
+    networks:
+      - backend
+      - frontend
+    expose:
+      - "${DB_PORT}"
+      - "${NGINX_PORT}"
+
+  Nginx:
+    build:
+      context: ./nginx
+      dockerfile: dockerfile
+    container_name: Nginx
+    restart: always
+    depends_on:
+      - Wordpress
+    networks:
+      - frontend
+    expose:
+      - "${NGINX_PORT}"
+    ports:
+      - "443:443"
+
+volumes:
+  mariabd-data:
+  wordpress:
